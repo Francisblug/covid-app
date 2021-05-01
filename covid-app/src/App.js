@@ -3,6 +3,9 @@ import React, {useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "./components/Navbar";
 import Countries from "./components/Countries";
+import Home from "./components/Home";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
 
 function App() {
 const [countryData, setCountryData] = useState([]);
@@ -30,7 +33,7 @@ const getCountryData = () => {
   };
   
   axios.request(options).then(function (response) {
-    //console.log(response.data);
+    console.log(response.data);
     setCountryData(response.data);
   }).catch(function (error) {
     console.error(error);
@@ -40,10 +43,18 @@ const getCountryData = () => {
 
   
   return (
+    <Router>
     <div className="App">
       <Navbar />
-      <Countries countryData={countryData} countryFlag = {countryFlag}/>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/liveData" render={(props) => (
+          <Countries {...props} countryData={countryData} countryFlag = {countryFlag} />
+        )}
+        />
+      </Switch>
     </div>
+    </Router>
   );
 }
 
